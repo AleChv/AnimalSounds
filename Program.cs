@@ -1,46 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public interface IEmitSound
+namespace AnimalSounds
 {
-    void EmitSound();
-}
-
-//The properties animalType and sound are hidden and can only be accessed or modified through the class methods
-class Animal : IEmitSound
-{
-    public string AnimalType { get; set; }
-    public string Sound { get; set; }
-
-    public Animal(string animalType, string sound)
+    class Program
     {
-        AnimalType = animalType;
-        Sound = sound;
-    }
-
-    public void EmitSound()
-    {
-        Console.WriteLine($"{AnimalType} makes sound: {Sound}");
-    }
-}
-
-class Program
-{
-    static void Main(string[] args)
-    {
-        //the list of objects that implements the IEmitSound interface
-        List<IEmitSound> soundEmitters = new List<IEmitSound>
+        static void Main(string[] args)
         {
-            new Animal("Dog", "Bark"),
-            new Animal("Cat", "Meow"),
-            new Animal("Cow", "Moo"),
-            new Animal("Sheep", "Baa"),
-            new Animal("Duck", "Quack")
-        };
+            //Codul pune mai multe animale într-o listă, toate mostenind clasa animal si putand sa scoata sunete.
+            //Arată cum un leu vânează, obosește și își schimbă sunetul, iar la final, toate animalele se odihnesc și își schimbă sunetul după ce se odihnesc.
+            var animals = new List<Animal>
+            {
+                new Dog(),
+                new Cat(),
+                new Cow(),
+                new Sheep(),
+                new Duck(),
+                new Lion() // Demonstrates method overriding
+            };
 
-        foreach (var soundEmitter in soundEmitters)
-        {
-            soundEmitter.EmitSound();
+            var lion = new Lion();
+            Console.WriteLine("Initial lion sound:");
+            Console.WriteLine($"{lion.GetName()} says: {lion.GetSound()}");
+
+            Console.WriteLine("\nLion hunts and rests:");
+            lion.Hunt();
+            Console.WriteLine($"{lion.GetName()} says: {lion.GetSound()}");
+            lion.Rest();
+            Console.WriteLine($"{lion.GetName()} rested and now says: {lion.GetSound()}");
+
+            Console.WriteLine("\nMaking animals tired:");
+            foreach (var animal in animals)
+            {
+                Console.WriteLine($"\n{animal.GetName()}:");
+                for (int i = 0; i < 5; i++)
+                {
+                    Console.WriteLine($"Sound {i + 1}: {animal.GetSound()}");//string interpolation, incepe numaratoarea de la 1
+                }
+                
+                animal.Rest();
+                Console.WriteLine($"After resting: {animal.GetSound()}");
+            }
         }
     }
 }
